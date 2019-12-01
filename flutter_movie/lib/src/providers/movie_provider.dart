@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter_movie/src/models/actors_model.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter_movie/src/models/movie_model.dart';
@@ -77,5 +78,21 @@ class MoviesProvider {
     //Cuando la respuesta ya se tiene del servicio.
     _loader = false;
     return response;
+  }
+
+  Future<List<Actor>> getCast(String movieId) async {
+    //**Creando el Url */
+    final url = Uri.https(_url, '3/movie/$movieId/credits', {
+      'api_key': _apiKey,
+      'language': _language,
+    });
+    //Esperamos la respuesta
+    final response = await http.get(url);
+    //Toma el cuerpo de la respuesta y lo transforma en un mapa
+    final decodedData = json.decode(response.body);
+    //Obtenemos la  lista del decodedData
+    final cast = new Cast.fromJsonList(decodedData['cast']);
+
+    return cast.actores;
   }
 }

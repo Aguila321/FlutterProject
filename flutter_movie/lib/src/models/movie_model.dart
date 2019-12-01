@@ -64,12 +64,18 @@ class Movie {
   }
 
   getPosterImg() {
-    
     if (posterPath == null) {
-      
       return 'http://salasardyechem.com/img/not-available.jpg';
     } else {
       return "https://image.tmdb.org/t/p/w500/$posterPath";
+    }
+  }
+
+  getBackgroundImg() {
+    if (posterPath == null) {
+      return 'http://salasardyechem.com/img/not-available.jpg';
+    } else {
+      return "https://image.tmdb.org/t/p/w500/$backdropPath";
     }
   }
 }
