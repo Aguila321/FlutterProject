@@ -9,6 +9,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    moviesProvider.getPopularity();
     return Scaffold(
       appBar: AppBar(
         title: Text('Movies on Cinema'),
@@ -75,18 +76,37 @@ class HomePage extends StatelessWidget {
           SizedBox(
             height: 5.0,
           ),
-          FutureBuilder(
-            future: moviesProvider.getPopularity(),
+          //Se ejecuta cada vez que introduzcan informacion al stream
+          StreamBuilder(
+            //obteniendo los valores
+            stream: moviesProvider.popularesStream,
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               //Imprimimos la lista de Peliculas el titulo
               // snapshot.data?.forEach((p) => print(p.title));
               if (snapshot.hasData) {
-                return MovieHorizontal(movies: snapshot.data);
+                return MovieHorizontal(
+                  movies: snapshot.data,
+                  //Ejecuta la siguiente pagina segun el scroll
+                  siguientePagina: moviesProvider.getPopularity,
+                );
               } else {
                 return Center(child: CircularProgressIndicator());
               }
             },
           ),
+          //**  El future builder solo se ejecuta una vez */
+          // FutureBuilder(
+          //   future: moviesProvider.getPopularity(),
+          //   builder: (BuildContext context, AsyncSnapshot snapshot) {
+          //     //Imprimimos la lista de Peliculas el titulo
+          //     // snapshot.data?.forEach((p) => print(p.title));
+          //     if (snapshot.hasData) {
+          //       return MovieHorizontal(movies: snapshot.data);
+          //     } else {
+          //       return Center(child: CircularProgressIndicator());
+          //     }
+          //   },
+          // ),
         ],
       ),
     );
